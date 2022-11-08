@@ -210,6 +210,8 @@ suppressMessages({
   library(pool)
 })
 
+install.packages("flextable")
+
 ```
 
 
@@ -322,3 +324,21 @@ scale_fill_MountSinai <- function(palette = "all", discrete = TRUE, reverse = FA
 not_all_na <- function(x) all(!is.na(x)) # Exclude columns with All NAs
 
 ```
+
+
+```{r}
+
+con <- dbPool(drv = odbc(), dsn = "OAO Cloud DB SoYoun", timeout = 30)
+
+slot_raw <- tbl(con, "Y_DM_BOOKED_FILLED_RATE")
+slot_data <- slot_raw %>%
+  select(DEPARTMENT_NAME, SLOT_BEGIN_TIME)
+
+conn <- dbPool(drv = odbc(), dsn = "Caboodle", timeout = 30)
+referrals <- tbl(conn, "Referrals")
+referrals_data <- referrals %>%
+  select(ReferralKey) %>%
+  collect()
+
+```
+
